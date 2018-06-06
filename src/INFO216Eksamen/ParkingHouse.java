@@ -20,6 +20,15 @@ public class ParkingHouse {
      */
 
     public static void main(String[] args) {
+        createOntology();
+
+        System.out.println("//////////////////");
+
+        createOntologyInsert();
+    }
+
+
+    private static void createOntology(){
         OntModel ontModel = ModelFactory.createOntologyModel();
 
         String base = "https://ontology.com/";
@@ -55,15 +64,35 @@ public class ParkingHouse {
 
         ontModel.write(System.out, "TURTLE");
 
-
-
-
-
-
-
-
     }
 
+    private static void createOntologyInsert(){
 
+        OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
+
+        String base = "http://example.com";
+        String prefix = "" +
+                "PREFIX base: " + base +
+                "PREFIX OWL: " + "<" +  OWL.getURI() + ">" +
+                "PREFIX rdf: " + "<" +  RDF.getURI() + ">";
+
+        UpdateAction.parseExecute(
+                prefix + "" +
+                        "INSERT DATA {" +
+                        "base:ParkingHouse a base:Buidling." +
+                        "owl:Restriction owl:onProperty base:hasCarCapacity;" +
+                        "                owl:allValuesFrom base:ParkingHouse." +
+                        "owl:Restriction owl:onProperty base:hasLocation;" +
+                        "                owl:allValuesFrom base:Location." +
+                        "base:CityGarage a base:ParkingHouse; " +
+                        "               base:hasCarCapacity 225." +
+                        "base:SV27564 a Car; " +
+                        "       base:hasLocation base:CityGarage. "+
+                        "}", ontModel
+        );
+
+        ontModel.getWriter("Turtle").write(ontModel, System.out, base);
+
+    }
 
 }
