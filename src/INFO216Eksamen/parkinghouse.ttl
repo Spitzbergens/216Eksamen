@@ -1,0 +1,103 @@
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+
+<http://ontology.com/#Location>
+        a                               owl:Class ;
+        <http://ontology.com/#hasAlt>   xsd:float ;
+        <http://ontology.com/#hasLat>   xsd:float ;
+        <http://ontology.com/#hasLong>  xsd:float .
+
+<http://ontology.com/#hasVehicle>
+        a       owl:ObjectProperty .
+
+<http://ontology.com/#Mats>
+        a       <http://xmlns.com/foaf/0.1/Person> ;
+        <http://ontology.com/#hasLocation>
+                <http://ontology.com/#BusStop> , <http://ontology.com/#BicycleStand> ;
+        <http://ontology.com/#hasVehicle>
+                <http://ontology.com/#Bicycle> .
+
+<http://ontology.com/#Bus>
+        a                owl:Class ;
+        rdfs:subClassOf  <http://ontology.com/#Vehicle> ;
+        <http://ontology.com/#hasLocation>
+                <http://ontology.com/#BusStop> .
+
+<http://ontology.com/#Building>
+        a       owl:FunctionalProperty , owl:Class ;
+        <http://ontology.com/#hasLocation>
+                <http://ontology.com/#Location> .
+
+<http://ontology.com/#carCapacity>
+        a       owl:ObjectProperty .
+
+<http://ontology.com/#Car>
+        a                 owl:Class ;
+        rdfs:subClassOf   <http://ontology.com/#Vehicle> ;
+        <http://ontology.com/#hasLocation>
+                <http://ontology.com/#ParkingHouse> ;
+        owl:disjointWith  <http://ontology.com/#Bicycle> , <http://ontology.com/#Bus> .
+
+<http://ontology.com/#totalNoOfBusSeats>
+        a           owl:ObjectProperty ;
+        rdfs:range  <http://ontology.com/#Bus> .
+
+<http://ontology.com/#BicycleStand>
+        a       <http://ontology.com/#Location> .
+
+<http://ontology.com/#BusStop>
+        a       <http://ontology.com/#Location> .
+
+<http://ontology.com/#TaxiStop>
+        a       <http://ontology.com/#Location> .
+
+<http://ontology.com/#hasLong>
+        a       owl:ObjectProperty .
+
+<http://ontology.com/#Vehicle>
+        a       owl:Class .
+
+<http://ontology.com/#Bicycle>
+        a                owl:Class ;
+        rdfs:subClassOf  <http://ontology.com/#Vehicle> ;
+        <http://ontology.com/#hasLocation>
+                <http://ontology.com/#BicycleStand> .
+
+<http://ontology.com/#hasLat>
+        a           owl:ObjectProperty ;
+        rdfs:range  xsd:float .
+
+[ a                owl:Restriction ;
+  owl:cardinality  "40"^^xsd:int ;
+  owl:onProperty   <http://ontology.com/#totalNoOfBusSeats>
+] .
+
+<http://ontology.com/#ParkingHouse>
+        a                owl:Class ;
+        rdfs:subClassOf  <http://ontology.com/#Building> ;
+        <http://ontology.com/#carCapacity>
+                xsd:integer .
+
+<http://ontology.com/#hasLocation>
+        a       owl:FunctionalProperty , owl:ObjectProperty .
+
+<http://ontology.com/#PrivateCar>
+        a       <http://ontology.com/#Car> .
+
+[ a                owl:Restriction ;
+  owl:cardinality  "4"^^xsd:int ;
+  owl:onProperty   <http://ontology.com/#noOfSeats>
+] .
+
+<http://ontology.com/#noOfSeats>
+        a       owl:ObjectProperty .
+
+<http://ontology.com/#Taxi>
+        a       <http://ontology.com/#Car> ;
+        <http://ontology.com/#hasLocation>
+                <http://ontology.com/#TaxiStop> .
+
+<http://ontology.com/#hasAlt>
+        a       owl:ObjectProperty .

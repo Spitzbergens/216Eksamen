@@ -2,7 +2,6 @@ package INFO216Eksamen;
 
 import org.apache.jena.ontology.OntModel;
 import org.apache.jena.ontology.OntModelSpec;
-import org.apache.jena.rdf.model.Model;
 import org.apache.jena.rdf.model.ModelFactory;
 import org.apache.jena.rdf.model.Property;
 import org.apache.jena.rdf.model.Resource;
@@ -41,15 +40,20 @@ public class ParkingHouse {
         Resource car = ontModel.createResource(base + "Car");
 
 
+
+
         Property locationProp = ontModel.createProperty(base + "hasLocation");
         Property capacity = ontModel.createProperty(base + "hasCarCapacity");
 
-        Resource restrictionCapacity = ontModel.createRestriction("ParkingHouseCapacity", capacity);
-        Resource restrictionLocation = ontModel.createRestriction("LocationRestriction", locationProp);
+//        Resource restrictionCapacity = ontModel.createRestriction("ParkingHouseCapacity", capacity);
+//        Resource restrictionLocation = ontModel.createRestriction("LocationRestriction", locationProp);
 
 
         parkingHouse.addProperty(RDF.type, building);
-        parkingHouse.addLiteral(capacity, 50);
+
+
+        capacity.addProperty(OWL.disjointWith, capacity);
+        parkingHouse.addProperty(OWL.disjointWith, parkingHouse);
 
 
         cityGarage.addProperty(RDF.type, parkingHouse);
@@ -57,9 +61,10 @@ public class ParkingHouse {
 
         aCar.addProperty(RDF.type, car);
         aCar.addProperty(locationProp, cityGarage);
-
-        restrictionCapacity.addProperty(OWL.allValuesFrom, parkingHouse);
-        restrictionLocation.addProperty(OWL.allValuesFrom, location);
+        car.addProperty(OWL.disjointWith, car);
+//
+//        restrictionCapacity.addProperty(OWL.allValuesFrom, parkingHouse);
+//        restrictionLocation.addProperty(OWL.allValuesFrom, location);
 
 
         ontModel.write(System.out, "TURTLE");
@@ -70,24 +75,24 @@ public class ParkingHouse {
 
         OntModel ontModel = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
 
-        String base = "http://example.com";
-        String prefix = "" +
-                "PREFIX base: " + base +
-                "PREFIX OWL: " + "<" +  OWL.getURI() + ">" +
-                "PREFIX rdf: " + "<" +  RDF.getURI() + ">";
+        String base = "http://example.com#";
+        String prefix =
+                "PREFIX base: " + "<" +  base + "> " +" " +
+                "PREFIX owl: " + "<" +  OWL.getURI() + "> " +
+                "PREFIX rdf: " + "<" +  RDF.getURI() + "> ";
 
         UpdateAction.parseExecute(
-                prefix + "" +
+                prefix +
                         "INSERT DATA {" +
-                        "base:ParkingHouse a base:Buidling." +
-                        "owl:Restriction owl:onProperty base:hasCarCapacity;" +
-                        "                owl:allValuesFrom base:ParkingHouse." +
-                        "owl:Restriction owl:onProperty base:hasLocation;" +
-                        "                owl:allValuesFrom base:Location." +
+                        "base:ParkingHouse a base:Buidling. " +
+                        "owl:Restriction owl:onProperty base:hasCarCapacity; " +
+                        "                owl:allValuesFrom base:ParkingHouse. " +
+                        "owl:Restriction owl:onProperty base:hasLocation; " +
+                        "                owl:allValuesFrom base:Location. " +
                         "base:CityGarage a base:ParkingHouse; " +
                         "               base:hasCarCapacity 225." +
-                        "base:SV27564 a Car; " +
-                        "       base:hasLocation base:CityGarage. "+
+                        "base:SV27564 rdf:Type base:Car. " +
+                        "base:SV27564 base:hasLocation base:CityGarage. "+
                         "}", ontModel
         );
 
